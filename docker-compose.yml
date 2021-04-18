@@ -1,0 +1,42 @@
+version: "3"
+services:
+  web:
+    build: ./frontend
+    ports:
+      - "80:80"
+    networks:
+      net-mernstack:
+        ipv4_address: 10.5.0.4
+  servidor:
+    build: ./backend
+    ports:
+      - "4000:4000"
+    networks:
+      net-mernstack:
+        ipv4_address: 10.5.0.6
+    depends_on:
+      - db_mysql
+  db_mysql:
+    image: mysql:5.7
+    container_name: db-backend
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      # MYSQL_USER: ${DB_USERNAME}
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    ports:
+      - 3306:3306
+    networks:
+      net-mernstack:
+        ipv4_address: 10.5.0.5
+volumes:
+  data-volume:
+networks:
+  net-mernstack:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.5.0.0/16

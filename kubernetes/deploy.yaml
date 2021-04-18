@@ -1,0 +1,17 @@
+apiVersion: extension/v1beta1
+kind: Deployment
+metadata: 
+  name: us-service
+spec:
+  replicas: 1
+  template: 
+    metadata: 
+      labels: 
+        app: us-service
+    spec:
+      containers:
+        -name: us-service
+        image: 
+        ports:
+          - name: http-port
+          containerPort: 80
